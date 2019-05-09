@@ -101,7 +101,7 @@ violet.addFlowScript(`
 <app>
   <choice id="launch">
     <expecting>What can you do</expecting>
-    <say>I can help you with planning Game Nights</say>
+    <say>I can help you with Account Suspension troubleshooting.</say>
   </choice>
   <choice id="list">
     <expecting>What game nights have already been planned</expecting>
