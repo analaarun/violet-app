@@ -49,6 +49,17 @@ var calcDateInFuture = (dayOfWeekStr, timeInPMStr)=>{
 };
 // Hook up the Script
 var app = {
+  getUserDetails: (response)=>{
+    return response.load({
+      query: `Id, lastname, firstname FROM Contact WHERE lastname = '${response.get('lastname')}'`
+    }).then((results)=>{
+      if (results.length == 0) {
+        response.say(`Sorry, I did not found any records with your lastname`);
+      } else {
+        response.say(`Hello ${results[0].get('firstname')} ${results[0].get('lastname')} , you are authentication successfully`);
+      }
+    });
+  },
   getPastGameNights: (response)=>{
     return response.load({
       query: 'Id, Duration__c, Food__c, Game__c, Name, Start_Time__c FROM Game_Night__c WHERE Start_Time__c < TODAY'
@@ -122,7 +133,7 @@ violet.addFlowScript(`
     <expecting>I'm looking to organize a game night {this [[day]]|}</expecting>
     <item name="day" required>
       <ask>What day would you like it to be on?</ask>
-      <expecting>{I'd like it to be]} this [[day]]</expecting>
+      <expecting>{I'd like it to be} this [[day]]</expecting>
     </item>
     <item name="duration" required>
       <ask>How long would you like it to be?</ask>
@@ -144,14 +155,10 @@ violet.addFlowScript(`
     <expecting>I want to know why my account suspended.</expecting>
     <item name="lastname" required>
       <ask>What is your last name?</ask>
-      <expecting>{My LastName is} [[lastname]]</expecting>
+      <expecting>{My Last Name is} [[lastname]]</expecting>
     </item>
-    <item name="dateofbirth" required>
-      <ask>What is you date of birth in ddmmyyyy format?</ask>
-      <expecting>{My Date of birth is} [[dateofbirth]]</expecting>
-    </item>
-    <resolve value="">
-      <say>Great, you are all set</say>
+    <resolve value="app.getUserDetails(response)">
+    <say>Great, you are all set</say>
     </resolve>
   </dialog>
   <choice id="update">
