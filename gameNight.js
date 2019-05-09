@@ -54,9 +54,9 @@ var app = {
       query: `Id, lastname, firstname FROM Contact WHERE lastname = '${response.get('lastname')}'`
     }).then((results)=>{
       if (results.length == 0) {
-        response.say(`Sorry, I did not found any records with your lastname`);
+        response.say(`Sorry, I am not able to authenticate at this point of time.`);
       } else {
-        response.say(`Hello ${results[0].get('firstname')} ${results[0].get('lastname')} , you are authentication successfully`);
+        response.say(`Hello ${results[0].get('firstname')} ${results[0].get('lastname')}. I can see your account num ABC123 got suspended because your payment was not successful due to credit card expiry.`);
       }
     });
   },
@@ -129,6 +129,29 @@ violet.addFlowScript(`
       </choice>
     </decision>
   </choice>
+  <dialog id="ques1" elicit="dialog.nextReqdParam()">
+    <expecting>I am not able to login salesforce.</expecting>
+    <say>Sorry for the inconvenience. Let me check this for you.</say>
+    <item name="lastname" required>
+      <ask>What is your last name?</ask>
+      <expecting>{My Last Name is} [[lastname]]</expecting>
+    </item>
+    <item name="dob" required>
+      <ask>please confirm you date of birth in MMDDYYYY format. For example your date of birth is 3rd February 2000 then say 03022000</ask>
+      <expecting>{My date of birth is} [[dob]]</expecting>
+    </item>
+    <resolve value="app.getUserDetails(response)">
+    </resolve>
+  </dialog>
+  <dialog id="suggest1" elicit="dialog.nextReqdParam()">
+    <expecting>can you suggest an alternative way to make payment?</expecting>
+    <say>I have the following options for you.</say>
+    <say>you can call out service agent and make the payment or you can make a wire transfer.</say>
+  </dialog>
+  <dialog id="askWire" elicit="dialog.nextReqdParam()">
+    <expecting>Can you share the details of wire transfer?</expecting>
+    <say>Sure let me send you the email with invoice that contain the details.</say>
+  </dialog>
   <dialog id="create" elicit="dialog.nextReqdParam()">
     <expecting>I'm looking to organize a game night {this [[day]]|}</expecting>
     <item name="day" required>
