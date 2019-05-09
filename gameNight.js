@@ -140,6 +140,20 @@ violet.addFlowScript(`
       <say>Great, you are all set</say>
     </resolve>
   </dialog>
+  <dialog id="fetch" elicit="dialog.nextReqdParam()">
+    <expecting>I want to know why my account suspended.</expecting>
+    <item name="lastname" required>
+      <ask>What is your last name?</ask>
+      <expecting>{My LastName is} [[lastname]]</expecting>
+    </item>
+    <item name="dateofbirth" required>
+      <ask>What is you date of birth in ddmmyyyy format?</ask>
+      <expecting>{My Date of birth is} [[dateofbirth]]</expecting>
+    </item>
+    <resolve value="">
+      <say>Great, you are all set</say>
+    </resolve>
+  </dialog>
   <choice id="update">
     <expecting>Update</expecting>
     <expecting>Delete</expecting>
